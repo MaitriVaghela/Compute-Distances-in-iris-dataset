@@ -1,0 +1,145 @@
+import numpy as np
+import pandas
+from sklearn.preprocessing import normalize
+from scipy.spatial import distance
+import matplotlib.pyplot as plt
+
+#Reading the Data 
+df = pandas.read_excel('**\iris_1.xlsx')
+
+#eliminating the last column
+del df['FN']
+
+#forming a data matrix
+df=np.array(df)
+
+#Normalizing the data matrix
+print("Before Normalizaton")
+print(df)
+df_norm = normalize(df, axis=0)
+print("After normalization")
+print(df_norm)
+
+#calculationg the Euclidean Distance
+df_eucl = distance.cdist(df_norm, df_norm, 'seuclidean')
+print("Eclidean distance")
+print(df_eucl)
+
+#Calculating the cosine distance
+df_cosine = distance.cdist(df_norm, df_norm,'cosine')
+print("Cosine distance")
+print(df_cosine)
+
+#Calulclating the Mahalanabois distance
+df_maha = distance.cdist(df_norm, df_norm,'mahalanobis')
+print("Mahalanabois distance")
+print(df_maha)
+
+#Plotting the distance matrices
+plt.matshow(df_eucl)
+plt.show()
+
+plt.matshow(df_cosine)
+plt.show()
+
+plt.matshow(df_maha)
+plt.show()
+
+#Calculating the proximity between euclidean distance matrix
+df_eucl_split_1 = df_eucl[0:50,0:50]
+df_eucl_split_2 = df_eucl[50:100,50:100]
+df_eucl_split_3 = df_eucl[100:150,100:150]
+
+df_eucl_split_1_centroid = np.mean(np.mean(df_eucl_split_1))
+print("df_eucl_split_1_centroid")
+print(df_eucl_split_1_centroid)
+
+df_eucl_split_2_centroid = np.mean(np.mean(df_eucl_split_2))
+print("df_eucl_split_2_centroid")
+print(df_eucl_split_2_centroid)
+
+df_eucl_split_3_centroid = np.mean(np.mean(df_eucl_split_3))
+print("df_eucl_split_3_centroid")
+print(df_eucl_split_3_centroid)
+
+df_eucl_prox = np.zeros((3,3))
+df_eucl_prox[0,0] = df_eucl_split_1_centroid
+df_eucl_prox[1,1] = df_eucl_split_2_centroid
+df_eucl_prox[2,2] = df_eucl_split_3_centroid
+
+df_eucl_prox[0,1] = df_eucl_split_2_centroid -  df_eucl_split_1_centroid
+df_eucl_prox[1,0] = df_eucl_prox[0,1]
+
+df_eucl_prox[0,2] = df_eucl_split_3_centroid -  df_eucl_split_1_centroid
+df_eucl_prox[2,0] = df_eucl_prox[0,2]
+
+df_eucl_prox[1,2] = df_eucl_split_3_centroid -  df_eucl_split_2_centroid
+df_eucl_prox[2,1] = df_eucl_prox[1,2]
+
+print(df_eucl_prox)
+    
+#Calculating the proximity between Cosine distance matrix
+df_cosine_split_1 = df_cosine[0:50,0:50]
+df_cosine_split_2 = df_cosine[50:100,50:100]
+df_cosine_split_3 = df_cosine[100:150,100:150]
+
+df_cosine_split_1_centroid = np.mean(np.mean(df_cosine_split_1))
+print("df_cosine_split_1_centroid")
+print(df_cosine_split_1_centroid)
+
+df_cosine_split_2_centroid = np.mean(np.mean(df_cosine_split_2))
+print("df_cosine_split_2_centroid")
+print(df_cosine_split_2_centroid)
+
+df_cosine_split_3_centroid = np.mean(np.mean(df_cosine_split_3))
+print("df_cosine_split_3_centroid")
+print(df_cosine_split_3_centroid)
+
+df_cosine_prox = np.zeros((3,3))
+df_cosine_prox[0,0] = df_cosine_split_1_centroid
+df_cosine_prox[1,1] = df_cosine_split_2_centroid
+df_cosine_prox[2,2] = df_cosine_split_3_centroid
+
+df_cosine_prox[0,1] = df_cosine_split_2_centroid -  df_cosine_split_1_centroid
+df_cosine_prox[1,0] = df_cosine_prox[0,1]
+
+df_cosine_prox[0,2] = df_cosine_split_3_centroid -  df_cosine_split_1_centroid
+df_cosine_prox[2,0] = df_cosine_prox[0,2]
+
+df_cosine_prox[1,2] = df_cosine_split_3_centroid -  df_cosine_split_2_centroid
+df_cosine_prox[2,1] = df_cosine_prox[1,2]
+
+print(df_cosine_prox)
+    
+#Calculating the proximity between Mahalanobis distance martix
+df_maha_split_1 = df_maha[0:50,0:50]
+df_maha_split_2 = df_maha[50:100,50:100]
+df_maha_split_3 = df_maha[100:150,100:150]
+
+df_maha_split_1_centroid = np.mean(np.mean(df_maha_split_1))
+print("df_maha_split_1_centroid")
+print(df_maha_split_1_centroid)
+
+df_maha_split_2_centroid = np.mean(np.mean(df_maha_split_2))
+print("df_maha_split_2_centroid")
+print(df_maha_split_2_centroid)
+
+df_maha_split_3_centroid = np.mean(np.mean(df_maha_split_3))
+print("df_maha_split_3_centroid")
+print(df_maha_split_3_centroid)
+
+df_maha_prox = np.zeros((3,3))
+df_maha_prox[0,0] = df_maha_split_1_centroid
+df_maha_prox[1,1] = df_maha_split_2_centroid
+df_maha_prox[2,2] = df_maha_split_3_centroid
+
+df_maha_prox[0,1] = df_maha_split_2_centroid -  df_maha_split_1_centroid
+df_maha_prox[1,0] = df_maha_prox[0,1]
+
+df_maha_prox[0,2] = df_maha_split_3_centroid -  df_maha_split_1_centroid
+df_maha_prox[2,0] = df_maha_prox[0,2]
+
+df_maha_prox[1,2] = df_maha_split_3_centroid -  df_maha_split_2_centroid
+df_maha_prox[2,1] = df_maha_prox[1,2]
+
+print(df_maha_prox)
